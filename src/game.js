@@ -5,6 +5,8 @@ var obj;
 var board;
 var j,k;
 var size;
+var score;
+var Score;
 var LoactionX;
 var INITIALIZED_2 = false;
 var sprite_ball = null;
@@ -29,6 +31,12 @@ var HelloWorldLayer2 = cc.Layer.extend({
         this.addChild(sprite_board1, 5);
         board=[];
 
+        score = 0;
+        Score = new cc.LabelTTF("Score :"+score,"Arial",40);
+        Score.x = size.width-100;
+        Score.y = size.height-30;
+        Score.fillStyle = cc.color(255,0,0,255);
+        this.addChild(Score,0);    
         for(k=0;k<4;k++)
         {
             board[k]=sprite_board1;
@@ -50,25 +58,34 @@ var HelloWorldLayer2 = cc.Layer.extend({
                 onMouseDown: function(event){
                     if(event.getButton()== cc.EventMouse.BUTTON_LEFT)
                     {
-                        cc.log("Mouse Event");
+                       
+                        
+                        cc.log("Mouse Event"+score);
+                        score++;
                         LoactionX = event.getLocationX();
                         var sprite_action = cc.JumpTo.create(1.5,cc.p(event.getLocationX(),event.getLocationY()),100,1);
                         var sprite_action2 = cc.MoveTo.create(2,cc.p(0,-100));
                         sprite_ball.runAction(sprite_action);
                         sprite_board1.runAction(sprite_action2);
                         obj.scheduleOnce(ballmove,1.5);
+                        Score_update();
+
 
                     }
                 }
             },this);
         }
-		
+		 
 		cc.director.setClearColor(cc.color(255, 255, 255, 255))
         this.schedule(collision, 0);
         
         return true;
     }
 });
+
+function Score_update(){
+    Score.setString("Score :" +score);
+}
 
 var collision=function(){
     for(var j = 0;j < 4;j++){
